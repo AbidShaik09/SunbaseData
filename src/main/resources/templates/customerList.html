@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer List</title>
+
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="/webjars/bootstrap/4.6.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Customer List</h2>
+    <form action="/createCustomer" method="get">
+        <button type="submit">Create Customer</button>
+    </form>
+    <!-- Display error message if API request fails -->
+    <div th:if="${error}" class="alert alert-danger">
+        <p>Error: ${error}</p>
+    </div>
+
+    <!-- Display customer list if available -->
+    <div th:if="${customerList}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Street</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Loop through the customerList and display each customer -->
+            <tr th:each="customer : ${customerList}">
+                <td th:text="${customer.first_name}"></td>
+                <td th:text="${customer.last_name}"></td>
+                <td th:text="${customer.street}"></td>
+                <td th:text="${customer.address}"></td>
+                <td th:text="${customer.city}"></td>
+                <td th:text="${customer.state}"></td>
+                <td th:text="${customer.email}"></td>
+                <td th:text="${customer.phone}"></td>
+                <td>
+
+                    <form th:action="@{/updateCustomer/{id}(id=${customer.uuid})}" method="get" style="display: inline;">
+                        <button class="buttent" type="submit">Edit</button>
+                    </form>
+                    <form action="/deleteCustomer" method="post" style="display: inline;">
+                        <input type="hidden" th:name="uuid" th:value="${customer.uuid}" />
+                        <button class="buttent" type="submit" >Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Include Bootstrap JS and Popper.js (if needed) -->
+<script src="/webjars/jquery/3.6.0/dist/jquery.min.js"></script>
+<script src="/webjars/popper.js/2.10.2/dist/umd/popper.min.js"></script>
+<script src="/webjars/bootstrap/4.6.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
